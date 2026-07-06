@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GG — Grid n Growth | Karachi Design Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Mono:wght@400;700&family=Work+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#121014;
+    --surface:#1B181C;
+    --surface-2:#221E22;
+    --orange:#FF7A29;
+    --yellow:#FFC93C;
+    --paper:#F3ECE3;
+    --muted:#9C948B;
+    --line:#332F33;
+    --tape:#e8dfc9;
+    --radius:2px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--paper);
+    font-family:'Work Sans', sans-serif;
+    overflow-x:hidden;
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(255,122,41,0.07), transparent 40%),
+      radial-gradient(circle at 85% 30%, rgba(255,201,60,0.05), transparent 45%);
+  }
+  ::selection{background:var(--orange);color:#121014;}
+  a{color:inherit;text-decoration:none;}
+
+  .noise{
+    position:fixed;inset:0;pointer-events:none;z-index:2;opacity:0.035;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;right:0;z-index:50;
+    background:rgba(18,16,20,0.82);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  nav{
+    max-width:1180px;margin:0 auto;padding:18px 32px;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Anton',sans-serif;font-size:22px;letter-spacing:0.5px;}
+  .brand span{color:var(--orange);}
+  .brand small{
+    display:block;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1.5px;color:var(--muted);font-weight:400;text-transform:uppercase;
+  }
+  .navlinks{display:flex;gap:34px;font-size:14px;font-weight:500;}
+  .navlinks a{color:var(--muted);position:relative;padding:4px 0;transition:color .2s;}
+  .navlinks a:hover{color:var(--paper);}
+  .navlinks a::after{
+    content:'';position:absolute;left:0;bottom:0;height:1px;width:0;background:var(--orange);transition:width .25s;
+  }
+  .navlinks a:hover::after{width:100%;}
+  .nav-cta{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--orange);color:#181114;font-weight:700;font-size:13px;
+    padding:10px 18px;border-radius:3px;letter-spacing:.3px;
+    box-shadow:3px 3px 0 var(--yellow);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .nav-cta:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--yellow);}
+  .menu-toggle{display:none;background:none;border:none;color:var(--paper);font-size:24px;cursor:pointer;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding:168px 0 90px;position:relative;
+  }
+  .eyebrow{
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;
+    color:var(--orange);display:flex;align-items:center;gap:10px;margin-bottom:26px;
+  }
+  .eyebrow::before{content:'';width:26px;height:1px;background:var(--orange);}
+  .hero h1{
+    font-family:'Anton',sans-serif;
+    font-size:clamp(46px, 8vw, 96px);
+    line-height:0.98;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    max-width:900px;
+  }
+  .hero h1 em{
+    font-style:normal;color:var(--bg);
+    background:linear-gradient(100deg,var(--orange),var(--yellow));
+    padding:0 10px;display:inline-block;transform:rotate(-1deg);
+  }
+  .hero-sub{
+    display:flex;gap:60px;margin-top:40px;flex-wrap:wrap;
+  }
+  .hero-sub p{
+    max-width:420px;color:var(--muted);font-size:16.5px;line-height:1.65;
+  }
+  .hero-actions{display:flex;gap:16px;margin-top:14px;flex-wrap:wrap;}
+  .btn{
+    font-weight:700;font-size:14.5px;padding:14px 26px;border-radius:3px;
+    display:inline-flex;align-items:center;gap:10px;letter-spacing:.2px;
+    transition:transform .15s, box-shadow .15s;
+  }
+  .btn-solid{background:var(--orange);color:#181114;box-shadow:4px 4px 0 var(--yellow);}
+  .btn-solid:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--yellow);}
+  .btn-outline{border:1px solid var(--line);color:var(--paper);}
+  .btn-outline:hover{border-color:var(--orange);color:var(--orange);}
+
+  /* ---------- TICKER ---------- */
+  .ticker-band{
+    background:var(--orange);color:#181114;overflow:hidden;white-space:nowrap;
+    border-top:1px solid #000;border-bottom:1px solid #000;
+    transform:rotate(-1.2deg);margin:60px 0 0;position:relative;z-index:3;
+  }
+  .ticker-track{display:inline-flex;animation:scroll 26s linear infinite;padding:13px 0;}
+  .ticker-track span{
+    font-family:'Space Mono',monospace;font-weight:700;font-size:14px;letter-spacing:2px;
+    text-transform:uppercase;padding:0 28px;display:inline-flex;align-items:center;gap:28px;
+  }
+  @keyframes scroll{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* ---------- SECTION HEADS ---------- */
+  .section{padding:120px 0;}
+  .section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:60px;flex-wrap:wrap;}
+  .section-tag{
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--orange);margin-bottom:14px;display:block;
+  }
+  .section-head h2{
+    font-family:'Anton',sans-serif;font-size:clamp(32px,5vw,54px);text-transform:uppercase;line-height:1;
+  }
+  .section-head p{color:var(--muted);max-width:340px;font-size:15px;line-height:1.6;}
+
+  /* ---------- FILTER TABS ---------- */
+  .filters{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:56px;}
+  .filter-btn{
+    font-family:'Space Mono',monospace;font-size:12px;letter-spacing:1px;text-transform:uppercase;
+    padding:9px 18px;border:1px solid var(--line);border-radius:20px;color:var(--muted);
+    background:transparent;cursor:pointer;transition:.2s;
+  }
+  .filter-btn:hover{border-color:var(--orange);color:var(--paper);}
+  .filter-btn.active{background:var(--orange);color:#181114;border-color:var(--orange);font-weight:700;}
+
+  /* ---------- BOARD / GALLERY ---------- */
+  .board{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:44px 34px;
+  }
+  .pin-card{
+    position:relative;background:var(--surface);padding:14px 14px 20px;
+    border-radius:2px;box-shadow:0 18px 40px -18px rgba(0,0,0,0.7);
+    transition:transform .3s ease, box-shadow .3s ease;
+    cursor:default;
+  }
+  .pin-card:nth-child(odd){transform:rotate(-1.4deg);}
+  .pin-card:nth-child(even){transform:rotate(1.1deg);}
+  .pin-card:hover{transform:rotate(0deg) translateY(-6px);box-shadow:0 26px 50px -16px rgba(0,0,0,0.8);z-index:5;}
+  .pin-card::before{
+    content:'';position:absolute;top:-10px;left:50%;transform:translateX(-50%) rotate(-3deg);
+    width:64px;height:22px;background:var(--tape);opacity:0.85;
+    box-shadow:0 2px 6px rgba(0,0,0,0.35);
+  }
+  .pin-card .img-frame{
+    width:100%;aspect-ratio:4/5;overflow:hidden;background:#0f0d10;border:1px solid var(--line);
+  }
+  .pin-card.wide .img-frame{aspect-ratio:16/9;}
+  .pin-card img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(1.02);}
+  .pin-meta{display:flex;justify-content:space-between;align-items:flex-start;margin-top:14px;gap:10px;}
+  .pin-meta h3{font-size:15.5px;font-weight:700;}
+  .pin-tag{
+    font-family:'Space Mono',monospace;font-size:9.5px;letter-spacing:1px;text-transform:uppercase;
+    color:var(--bg);background:var(--yellow);padding:4px 8px;border-radius:2px;white-space:nowrap;transform:rotate(-2deg);
+  }
+  .pin-desc{font-size:12.5px;color:var(--muted);margin-top:6px;line-height:1.5;}
+  .pin-card[data-cat] {display:none;}
+  .pin-card.show{display:block;}
+
+  /* ---------- SERVICES ---------- */
+  .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);}
+  .service-cell{background:var(--bg);padding:38px 26px;transition:background .25s;}
+  .service-cell:hover{background:var(--surface);}
+  .service-num{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:400;}
+  .service-cell h3{font-family:'Work Sans',sans-serif;font-weight:600;font-size:17px;text-transform:none;margin:14px 0 8px;letter-spacing:0;}
+  .service-cell p{color:var(--muted);font-size:13.5px;line-height:1.6;}
+
+  /* ---------- PROCESS ---------- */
+  .process{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;}
+  .proc-step{border-top:2px solid var(--orange);padding-top:20px;}
+  .proc-step .num{font-family:'Anton',sans-serif;font-size:42px;color:var(--surface-2);-webkit-text-stroke:1.5px var(--orange);color:transparent;}
+  .proc-step h3{font-size:17px;font-weight:700;margin:10px 0 8px;}
+  .proc-step p{color:var(--muted);font-size:13.5px;line-height:1.6;}
+
+  /* ---------- CONTACT ---------- */
+  .contact{
+    background:linear-gradient(150deg,var(--surface),var(--bg));
+    border:1px solid var(--line);border-radius:4px;padding:70px 60px;
+    display:flex;justify-content:space-between;align-items:center;gap:40px;flex-wrap:wrap;position:relative;overflow:hidden;
+  }
+  .contact::after{
+    content:'';position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;
+    background:radial-gradient(circle, rgba(255,122,41,0.18), transparent 70%);
+  }
+  .contact h2{font-family:'Anton',sans-serif;font-size:clamp(30px,4.4vw,48px);text-transform:uppercase;line-height:1.05;max-width:520px;}
+  .contact-actions{display:flex;flex-direction:column;gap:14px;align-items:flex-start;}
+  .contact-note{font-size:12.5px;color:var(--muted);font-family:'Space Mono',monospace;}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;}
+  .foot-row{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;}
+  .foot-row p{font-size:12.5px;color:var(--muted);font-family:'Space Mono',monospace;}
+  .foot-socials{display:flex;gap:14px;}
+  .foot-socials a{
+    width:34px;height:34px;border:1px solid var(--line);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;color:var(--muted);
+    transition:.2s;
+  }
+  .foot-socials a:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px);}
+  .foot-socials svg{width:16px;height:16px;fill:currentColor;}
+  .foot-links{display:flex;gap:22px;font-size:12.5px;color:var(--muted);}
+  .foot-links a:hover{color:var(--orange);}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:900px){
+    .navlinks{display:none;}
+    .menu-toggle{display:block;}
+    .board{grid-template-columns:repeat(2,1fr);}
+    .services-grid{grid-template-columns:repeat(2,1fr);}
+    .process{grid-template-columns:repeat(2,1fr);gap:34px 24px;}
+    .contact{padding:44px 28px;flex-direction:column;text-align:left;}
+  }
+  @media (max-width:560px){
+    .wrap{padding:0 20px;}
+    nav{padding:16px 20px;}
+    .hero{padding:130px 0 60px;}
+    .board{grid-template-columns:1fr;}
+    .services-grid{grid-template-columns:1fr;}
+    .process{grid-template-columns:1fr;}
+    .section{padding:80px 0;}
+    .section-head{flex-direction:column;align-items:flex-start;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .ticker-track{animation:none;}
+    html{scroll-behavior:auto;}
+  }
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<header>
+  <nav>
+    <div class="brand">
+      <span>GG</span>
+      <div>
+        <div style="font-size:11px;color:var(--paper);letter-spacing:.3px;">Design Studio</div>
+        <small>Grid n Growth</small>
+      </div>
+    </div>
+    <div class="navlinks">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#process">Process</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a class="nav-cta" href="https://wa.me/923352433455" target="_blank" rel="noopener">Chat on WhatsApp →</a>
+  </nav>
+</header>
+
+<section class="hero wrap">
+  <span class="eyebrow">Karachi · Design · Marketing · Frontend Dev</span>
+  <h1>We design, market<br>and <em>build</em> the stuff<br>your business runs on.</h1>
+  <div class="hero-sub">
+    <p>Menus, wedding cards, thumbnails and logos on one side — social media growth and real, coded websites on the other. Briefed on WhatsApp, delivered fast.</p>
+    <div>
+      <div class="hero-actions">
+        <a class="btn btn-solid" href="https://wa.me/923352433455" target="_blank" rel="noopener">Start a project</a>
+        <a class="btn btn-outline" href="#work">See the work ↓</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-band">
+  <div class="ticker-track">
+    <span>✦ LOGOS &amp; BRANDING ✦ WEDDING CARDS ✦ RESTAURANT MENUS ✦ YOUTUBE THUMBNAILS ✦ PRICE LISTS ✦ EVENT FLYERS ✦ SOCIAL POSTS</span>
+    <span>✦ LOGOS &amp; BRANDING ✦ WEDDING CARDS ✦ RESTAURANT MENUS ✦ YOUTUBE THUMBNAILS ✦ PRICE LISTS ✦ EVENT FLYERS ✦ SOCIAL POSTS</span>
+  </div>
+</div>
+
+<section class="section" id="work">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">Selected Work</span>
+        <h2>The Pinboard</h2>
+      </div>
+      <p>A few recent jobs — pulled straight off the design desk. Filter by category to see more of one thing.</p>
+    </div>
+
+    <div class="filters" id="filters">
+      <button class="filter-btn active" data-filter="all">All Work</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
+      <button class="filter-btn" data-filter="thumbnails">Thumbnails</button>
+      <button class="filter-btn" data-filter="invitations">Invitations</button>
+      <button class="filter-btn" data-filter="menus">Menus &amp; Price Lists</button>
+    </div>
+
+    <div class="board" id="board">
+
+      <div class="pin-card show wide" data-cat="thumbnails">
+        <div class="img-frame"><img src="images/thumbnail-trading.webp" alt="Stock trading YouTube thumbnail design — Small Losses, Sideways Market Trend"></div>
+        <div class="pin-meta"><h3>Stock Market Thumbnail</h3><span class="pin-tag">YouTube</span></div>
+        <p class="pin-desc">High-contrast finance channel thumbnail built for click-through — bold type over a live trading screen.</p>
+      </div>
+
+      <div class="pin-card show" data-cat="branding">
+        <div class="img-frame"><img src="images/logo-outfitter.webp" alt="Outfitter clothing brand logo design"></div>
+        <div class="pin-meta"><h3>Outfitter</h3><span class="pin-tag">Logo</span></div>
+        <p class="pin-desc">Minimal line-art mark for a clothing label — a dress icon set inside a diamond frame.</p>
+      </div>
+
+      <div class="pin-card show" data-cat="invitations">
+        <div class="img-frame"><img src="images/invite-wedding.webp" alt="Wedding ceremony invitation card design"></div>
+        <div class="pin-meta"><h3>Wedding Ceremony Card</h3><span class="pin-tag">Invite</span></div>
+        <p class="pin-desc">Traditional gold-on-cream invitation with script typography and full event timing.</p>
+      </div>
+
+      <div class="pin-card show wide" data-cat="menus">
+        <div class="img-frame"><img src="images/menu-spicykhan.webp" alt="Spicy Khan Restaurant menu and promo flyer design"></div>
+        <div class="pin-meta"><h3>Spicy Khan Restaurant</h3><span class="pin-tag">Menu / Flyer</span></div>
+        <p class="pin-desc">Appetite-driving promo menu with a discount callout and a clean two-column price layout.</p>
+      </div>
+
+      <div class="pin-card show" data-cat="invitations">
+        <div class="img-frame"><img src="images/invite-walima.webp" alt="Walima reception invitation card design"></div>
+        <div class="pin-meta"><h3>Walima Reception Card</h3><span class="pin-tag">Invite</span></div>
+        <p class="pin-desc">Floral-framed reception invite with a softer palette and matching QR detail.</p>
+      </div>
+
+      <div class="pin-card show" data-cat="menus">
+        <div class="img-frame"><img src="images/pricelist-cheesebud.webp" alt="CheeseBud price list design"></div>
+        <div class="pin-meta"><h3>CheeseBud Price List</h3><span class="pin-tag">Price List</span></div>
+        <p class="pin-desc">Grid-based price sheet for a cheese supplier — six products, three sizes, zero confusion.</p>
+      </div>
+
+      <div class="pin-card show" data-cat="branding">
+        <div class="img-frame"><img src="images/logo-tds.webp" alt="Design studio logo mark — pen nib and paintbrush monogram"></div>
+        <div class="pin-meta"><h3>Studio Mark</h3><span class="pin-tag">Logo</span></div>
+        <p class="pin-desc">An earlier studio identity — a pen nib and paintbrush fused into one monogram.</p>
+      </div>
+
+      <div class="pin-card show wide" data-cat="thumbnails">
+        <div class="img-frame"><img src="images/thumbnail-python.webp" alt="Python course series YouTube thumbnail design"></div>
+        <div class="pin-meta"><h3>Python Course Series</h3><span class="pin-tag">YouTube</span></div>
+        <p class="pin-desc">Educational series thumbnail template — consistent layout built to be reused across episodes.</p>
+      </div>
+
+      <div class="pin-card show" data-cat="invitations">
+        <div class="img-frame"><img src="images/flyer-bbq.webp" alt="Barbeque community event flyer design"></div>
+        <div class="pin-meta"><h3>BBQ Community Night</h3><span class="pin-tag">Event Flyer</span></div>
+        <p class="pin-desc">Warm, appetite-forward flyer for a community gathering, priced and located at a glance.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">What We Do</span>
+        <h2>Three Disciplines,<br>One Studio</h2>
+      </div>
+      <p>Design gets you noticed. Marketing gets you found. Frontend dev gives it all a home.</p>
+    </div>
+
+    <div class="services-grid">
+      <div class="service-cell">
+        <span class="service-num" style="color:var(--orange);">Design</span>
+        <h3>Logos &amp; Branding</h3>
+        <p>Marks, monograms and simple identity kits for new shops and brands.</p>
+      </div>
+      <div class="service-cell">
+        <span class="service-num" style="color:var(--orange);">Design</span>
+        <h3>Invitations &amp; Menus</h3>
+        <p>Wedding cards, restaurant menus and price lists — traditional or modern layouts.</p>
+      </div>
+      <div class="service-cell">
+        <span class="service-num" style="color:var(--orange);">Design</span>
+        <h3>Thumbnails &amp; Flyers</h3>
+        <p>YouTube thumbnails, event flyers and social posts designed to stop the scroll.</p>
+      </div>
+      <div class="service-cell">
+        <span class="service-num" style="color:var(--yellow);">Marketing</span>
+        <h3>Social Media Management</h3>
+        <p>Content calendars, captions and posting schedules that keep a page active.</p>
+      </div>
+      <div class="service-cell">
+        <span class="service-num" style="color:var(--yellow);">Marketing</span>
+        <h3>Ad Campaigns</h3>
+        <p>Meta &amp; Google ad setup, targeting and creative built to convert, not just impress.</p>
+      </div>
+      <div class="service-cell">
+        <span class="service-num" style="color:var(--yellow);">Marketing</span>
+        <h3>Content Strategy</h3>
+        <p>A plan for what to post, when, and why — tied back to actual business goals.</p>
+      </div>
+      <div class="service-cell">
+        <span class="service-num" style="color:var(--paper);">Frontend Dev</span>
+        <h3>Landing Pages</h3>
+        <p>Fast, responsive single pages built to launch a product, offer or campaign.</p>
+      </div>
+      <div class="service-cell">
+        <span class="service-num" style="color:var(--paper);">Frontend Dev</span>
+        <h3>Portfolio &amp; Business Sites</h3>
+        <p>Multi-section websites like this one — coded, not templated.</p>
+      </div>
+      <div class="service-cell">
+        <span class="service-num" style="color:var(--paper);">Frontend Dev</span>
+        <h3>Web App UIs</h3>
+        <p>Clean, functional interfaces for dashboards, tools and small web apps.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="process">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <span class="section-tag">How It Works</span>
+        <h2>From Brief to<br>Final File</h2>
+      </div>
+      <p>No long forms, no back-and-forth over email. Just WhatsApp.</p>
+    </div>
+    <div class="process">
+      <div class="proc-step">
+        <div class="num">01</div>
+        <h3>Send the brief</h3>
+        <p>Message the details on WhatsApp — text, photos, sizes, whatever you've got.</p>
+      </div>
+      <div class="proc-step">
+        <div class="num">02</div>
+        <h3>Get a first draft</h3>
+        <p>A working version comes back, usually within 24–48 hours.</p>
+      </div>
+      <div class="proc-step">
+        <div class="num">03</div>
+        <h3>Revise together</h3>
+        <p>Colours, text, layout — adjusted until it's exactly right.</p>
+      </div>
+      <div class="proc-step">
+        <div class="num">04</div>
+        <h3>Receive final files</h3>
+        <p>Print-ready and social-ready formats, delivered straight to your phone.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="wrap">
+    <div class="contact">
+      <h2>Got something<br>to design?</h2>
+      <div class="contact-actions">
+        <a class="btn btn-solid" href="https://wa.me/923352433455" target="_blank" rel="noopener">Message on WhatsApp</a>
+        <a class="btn btn-outline" href="mailto:gridngrowth@gmail.com">Send an email instead</a>
+        <span class="contact-note">We usually reply within a few hours.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <p>GG — GRID N GROWTH © 2026</p>
+    <div class="foot-links">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="foot-socials">
+      <a href="https://www.facebook.com/profile.php?id=61578017019275" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M22 12.06C22 6.5 17.52 2 12 2S2 6.5 2 12.06c0 5 3.66 9.17 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.5 1.49-3.89 3.78-3.89 1.1 0 2.24.2 2.24.2v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.87h2.78l-.44 2.91h-2.34V22c4.78-.77 8.44-4.94 8.44-9.94z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/gridngrowth/" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2c-2.72 0-3.06.01-4.12.06-1.06.05-1.79.22-2.43.47-.66.26-1.22.6-1.77 1.15-.55.55-.89 1.11-1.15 1.77-.25.64-.42 1.37-.47 2.43C2.01 8.94 2 9.28 2 12s.01 3.06.06 4.12c.05 1.06.22 1.79.47 2.43.26.66.6 1.22 1.15 1.77.55.55 1.11.89 1.77 1.15.64.25 1.37.42 2.43.47C8.94 21.99 9.28 22 12 22s3.06-.01 4.12-.06c1.06-.05 1.79-.22 2.43-.47.66-.26 1.22-.6 1.77-1.15.55-.55.89-1.11 1.15-1.77.25-.64.42-1.37.47-2.43.05-1.06.06-1.4.06-4.12s-.01-3.06-.06-4.12c-.05-1.06-.22-1.79-.47-2.43a4.9 4.9 0 0 0-1.15-1.77 4.9 4.9 0 0 0-1.77-1.15c-.64-.25-1.37-.42-2.43-.47C15.06 2.01 14.72 2 12 2zm0 1.8c2.67 0 2.99.01 4.04.06.98.04 1.5.2 1.85.34.47.18.8.4 1.15.75.35.35.57.68.75 1.15.14.35.3.87.34 1.85.05 1.05.06 1.37.06 4.04s-.01 2.99-.06 4.04c-.04.98-.2 1.5-.34 1.85-.18.47-.4.8-.75 1.15-.35.35-.68.57-1.15.75-.35.14-.87.3-1.85.34-1.05.05-1.37.06-4.04.06s-2.99-.01-4.04-.06c-.98-.04-1.5-.2-1.85-.34a3.1 3.1 0 0 1-1.15-.75 3.1 3.1 0 0 1-.75-1.15c-.14-.35-.3-.87-.34-1.85C3.81 14.99 3.8 14.67 3.8 12s.01-2.99.06-4.04c.04-.98.2-1.5.34-1.85.18-.47.4-.8.75-1.15.35-.35.68-.57 1.15-.75.35-.14.87-.3 1.85-.34C8.99 3.81 9.33 3.8 12 3.8zm0 3.05a5.15 5.15 0 1 0 0 10.3 5.15 5.15 0 0 0 0-10.3zm0 8.5a3.35 3.35 0 1 1 0-6.7 3.35 3.35 0 0 1 0 6.7zm5.35-8.7a1.2 1.2 0 1 1-2.4 0 1.2 1.2 0 0 1 2.4 0z"/></svg>
+      </a>
+      <a href="https://www.linkedin.com/in/hamza2024" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.36V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM3.56 20.45h3.56V9H3.56v11.45z"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const filterBtns = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.pin-card');
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      cards.forEach(card => {
+        if (filter === 'all' || card.dataset.cat === filter) {
+          card.classList.add('show');
+        } else {
+          card.classList.remove('show');
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
